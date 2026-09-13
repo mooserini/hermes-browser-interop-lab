@@ -12,18 +12,27 @@
   const inspectPageSemantics = () => {
     const count = (selector) => document.querySelectorAll(selector).length;
 
+    // Single DOM query for buttons to compute total count and unnamed buttons in a single pass,
+    // avoiding redundant querySelectorAll calls and intermediate array allocations.
+    const buttonElements = document.querySelectorAll('button, [role="button"]');
+    let unnamedButtons = 0;
+    for (let i = 0; i < buttonElements.length; i++) {
+      const element = buttonElements[i];
+      const label = element.getAttribute('aria-label') || element.getAttribute('aria-labelledby');
+      if (!label && !element.textContent?.trim()) {
+        unnamedButtons++;
+      }
+    }
+
     return {
       documentLanguage: document.documentElement.lang || 'not-declared',
       headings: count('h1, h2, h3, h4, h5, h6'),
       landmarks: count('header, nav, main, aside, footer, [role="banner"], [role="navigation"], [role="main"], [role="complementary"], [role="contentinfo"]'),
-      buttons: count('button, [role="button"]'),
+      buttons: buttonElements.length,
       links: count('a[href]'),
       forms: count('form'),
       imagesMissingAlt: count('img:not([alt])'),
-      unnamedButtons: [...document.querySelectorAll('button, [role="button"]')].filter((element) => {
-        const label = element.getAttribute('aria-label') || element.getAttribute('aria-labelledby');
-        return !label && !element.textContent?.trim();
-      }).length,
+      unnamedButtons,
       note: 'Counts only. No page text, form values, URLs, cookies, storage, or network data were read.',
     };
   };
