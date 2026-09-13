@@ -4,7 +4,7 @@
 
 A comprehensive findings-only review of the **Hermes Browser Interop Lab** repository was conducted, focusing on security, privacy, and Chrome extension platform alignment.
 
-**Conclusion:** The implementation accurately reflects its documented intent as a consent-gated, local-only, read-only research extension. The codebase employs a highly minimal, secure design with no accidental network access, storage, telemetry, credential access, remote code execution, or broad host permissions. The extension's behavior strictly aligns with its claims in `PRIVACY.md`, `SECURITY.md`, `CHROMEWEBSTORE.md`, and the newly reviewed `AGENTS.md`.
+**Conclusion:** The implementation accurately reflects its documented intent as a consent-gated, local-only, read-only research extension. The codebase employs a highly minimal, secure design with no accidental network access, storage, telemetry, credential access, remote code execution, or broad host permissions. The extension's behavior substantially aligns with its claims in `PRIVACY.md`, `SECURITY.md`, `CHROMEWEBSTORE.md`, and the newly reviewed `AGENTS.md`, noting minor wording and toolbar-state issues.
 
 ## Methodology
 
@@ -26,7 +26,7 @@ The implementation and this report are consistent with the boundaries defined in
 ### Confirmed Issues
 
 #### 1. Transparency/Wording Issue: Page Text Access Claim
-- **Location:** `src/injected-tools.js` (line 17, `inspectPageSemantics` tool result note)
+- **Location:** `src/injected-tools.js` (line 27, `inspectPageSemantics` tool result note)
 - **Detail:** The tool result note claims that "No page text... were read." However, `src/injected-tools.js` reads candidate buttons' `textContent` locally to calculate the `unnamedButtons` count. While page text is not returned, stored, or transmitted, it is transiently inspected for this aggregate count.
 - **Recommendation:** Treat the existing tool-result sentence claiming no page text is read as a transparency/wording issue. Update the documentation and tool result notice to state precisely that page text is not returned or transmitted, rather than claiming it is not read locally.
 
@@ -73,6 +73,6 @@ While the extension's risk profile is extremely low by design, the following obs
 - [x] **No credential access:** Verified. Script only queries non-sensitive tags/roles.
 - [x] **No broad host access:** Verified. `activeTab` only.
 - [x] **No remote code execution:** Verified. Static payload only.
-- [x] **No persistence:** Verified. Cleaned up on navigation or second click.
-- [x] **No misleading claims:** Verified. Metadata is highly transparent.
+- [x] **No persistence:** Verified. Injected page state and access end on navigation or second click. The toolbar UI may remain stale after navigation.
+- [x] **No misleading claims:** Wording discrepancy identified regarding page text access.
 - [x] **Chrome policy risks:** None. Follows documented MV3 and `activeTab` principles correctly.
