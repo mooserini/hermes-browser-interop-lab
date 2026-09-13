@@ -88,14 +88,24 @@ revocable authority:
 - **Delegated control** — one identified controller receives a temporary,
   capability-limited lease over an explicitly selected tab.
 
-Read the [consent-gated browser-control model](docs/agent-browser-control-model-draft.md)
-for the proposed architecture, routing policy, open decisions, and acceptance
-criteria. The complete [browser-custody integration plan](docs/plans/2026-09-13-browser-custody-integration.md)
+Read [ADR 0001](docs/adr/0001-browser-custody-architecture.md) and its
+[threat model](docs/threat-model-browser-custody.md) for the proposed normative
+gate. The [consent-gated browser-control model](docs/agent-browser-control-model-draft.md)
+is historical design exploration; ADR 0001 governs wherever they conflict. The
+complete [browser-custody integration plan](docs/plans/2026-09-13-browser-custody-integration.md)
 is preserved with its [plan provenance and status](docs/plans/README.md). The
 [local/origin reconciliation receipt](docs/research/local-origin-reconciliation-2026-09-13.md)
 records which local, branch, and merged artifacts were compared before the first
 implementation spike. These are design and provenance records, not functionality
 shipped by this repository.
+
+The proposed implementation gate is recorded in
+[ADR 0001](docs/adr/0001-browser-custody-architecture.md), its
+[threat model](docs/threat-model-browser-custody.md), the
+[prior-art disposition ledger](docs/prior-art-browser-custody.md), and
+[third-party notices](THIRD_PARTY_NOTICES.md). Until the ADR is explicitly
+accepted, every unresolved capability remains disabled by its fail-closed
+default.
 
 The first bounded implementation evidence is the
 [authority-reducer spike](spikes/001-authority-reducer/README.md), accompanied by

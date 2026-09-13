@@ -26,10 +26,10 @@ issue.
 
 A public security contact and coordinated-disclosure process must be added before broader distribution.
 
-## Proposed browser-custody research
+## Accepted browser-custody architecture
 
-The repository contains a design proposal for future approval-gated and
-delegated browser control. That document does not widen the current extension's
+The repository contains an accepted architecture for future approval-gated and
+delegated browser control. That acceptance does not widen the current extension's
 permissions or capabilities. Any implementation that adds `debugger`, a local
 broker, page mutation, page-content return, or a persistent browser identity
 requires a separate threat review and explicit maintainer approval before code
@@ -38,9 +38,17 @@ lands.
 If a side panel, controller pairing, or other delegated-control surface is
 added, installation, technical reachability, an open panel, a paired
 controller, or a prior grant must never count as current authorization.
-Proposed authority must be visible, tab-scoped, capability-scoped,
+Any future authority must be visible, tab-scoped, capability-scoped,
 time-bounded, revocable, and fail closed when identity or lifecycle state
 becomes ambiguous.
+
+The normative architecture gate is
+[`docs/adr/0001-browser-custody-architecture.md`](docs/adr/0001-browser-custody-architecture.md)
+together with
+[`docs/threat-model-browser-custody.md`](docs/threat-model-browser-custody.md).
+ADR 0001 was accepted by Thomas Kenny on 2026-09-13. Its acceptance authorizes
+architecture only; unresolved amendments take their fail-closed defaults, and
+older plans and drafts cannot authorize an implementation slice.
 
 ## Out of scope by design
 
