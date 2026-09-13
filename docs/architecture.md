@@ -2,7 +2,11 @@
 
 > **Current contract:** This document describes the shipped one-tab harness.
 > The broader [browser custody model](agent-browser-control-model-draft.md) is a
-> draft trajectory only and adds no present capability or permission.
+> draft trajectory only and adds no present capability or permission. The
+> accepted normative custody gate is [ADR 0001](adr/0001-browser-custody-architecture.md)
+> together with the [custody threat model](threat-model-browser-custody.md);
+> their fail-closed rules govern wherever older drafts conflict. Acceptance
+> governs architecture only and authorizes no implementation or permission.
 
 ## Data flow
 
