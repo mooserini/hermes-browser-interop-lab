@@ -75,6 +75,28 @@ Please read [SECURITY.md](SECURITY.md), [PRIVACY.md](PRIVACY.md), [docs/architec
 
 This is an independent interoperability experiment. It is not currently part of Hermes Agent, Google Chrome, Chromium, or Nous Research, and it is not endorsed by those projects. A successful experiment may later be proposed upstream through their ordinary review processes.
 
+## Research direction — no implementation claim
+
+The current extension remains the narrow, read-only harness described above. A
+separate research track is evaluating whether a future browser-control surface
+can preserve the same explicit-custody principle while supporting graduated,
+revocable authority:
+
+- **Dormant** — installed or reachable, but not invited;
+- **Conversational** — the agent is present beside the page, with no page access;
+- **Approval-gated** — each bounded action requires current approval;
+- **Delegated control** — one identified controller receives a temporary,
+  capability-limited lease over an explicitly selected tab.
+
+Read the [consent-gated browser-control model](docs/agent-browser-control-model-draft.md)
+for the proposed architecture, routing policy, open decisions, and acceptance
+criteria. This is a design proposal, not functionality shipped by this repository.
+
+The research also studies proprietary products only as observable product or
+anti-pattern evidence. Their closed code is not a dependency or source. See the
+[Sider product and monetization audit](docs/research/sider-closed-source-product-audit.md)
+for the evidentiary standard and one documented example.
+
 ## Authorship
 
 Authored by **Ara Voss**. Product direction, constraints, and testing partnership by **Thomas Kenny (`mooserini`)**.

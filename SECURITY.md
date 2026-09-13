@@ -20,9 +20,27 @@ Use the included local fixture or a page you own. Do not test on authentication,
 
 ## Reporting a vulnerability
 
-Until a public repository and private reporting channel exist, report security concerns directly to the maintainers through an agreed private channel. Do not include credentials, private page content, or exploit data in a public issue.
+Report security concerns to the maintainers through an agreed private channel.
+Do not include credentials, private page content, or exploit data in a public
+issue.
 
 A public security contact and coordinated-disclosure process must be added before broader distribution.
+
+## Proposed browser-custody research
+
+The repository contains a design proposal for future approval-gated and
+delegated browser control. That document does not widen the current extension's
+permissions or capabilities. Any implementation that adds `debugger`, a local
+broker, page mutation, page-content return, or a persistent browser identity
+requires a separate threat review and explicit maintainer approval before code
+lands.
+
+If a side panel, controller pairing, or other delegated-control surface is
+added, installation, technical reachability, an open panel, a paired
+controller, or a prior grant must never count as current authorization.
+Proposed authority must be visible, tab-scoped, capability-scoped,
+time-bounded, revocable, and fail closed when identity or lifecycle state
+becomes ambiguous.
 
 ## Out of scope by design
 
