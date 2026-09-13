@@ -22,7 +22,7 @@ chrome.action.onClicked.addListener(async (tab) => {
       }),
     ]);
   } catch (error) {
-    console.error('Hermes Browser Interop Lab could not run on this page.', error);
+    console.error('Hermes Browser Interop Lab could not run on this page.', error?.message);
     await Promise.all([
       chrome.action.setBadgeText({ tabId: tab.id, text: 'NO' }),
       chrome.action.setBadgeBackgroundColor({ tabId: tab.id, color: '#B42318' }),
