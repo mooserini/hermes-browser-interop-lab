@@ -4,7 +4,7 @@
 
 A comprehensive findings-only review of the **Hermes Browser Interop Lab** repository was conducted, focusing on security, privacy, and Chrome extension platform alignment.
 
-**Conclusion:** No material issues were found. The implementation accurately reflects its documented intent as a consent-gated, local-only, read-only research extension. The codebase employs a highly minimal, secure design with no accidental network access, storage, telemetry, credential access, remote code execution, or broad host permissions. The extension's behavior strictly aligns with its claims in `PRIVACY.md`, `SECURITY.md`, and `CHROMEWEBSTORE.md`.
+**Conclusion:** The implementation accurately reflects its documented intent as a consent-gated, local-only, read-only research extension. The codebase employs a highly minimal, secure design with no accidental network access, storage, telemetry, credential access, remote code execution, or broad host permissions. The extension's behavior strictly aligns with its claims in `PRIVACY.md`, `SECURITY.md`, `CHROMEWEBSTORE.md`, and the newly reviewed `AGENTS.md`.
 
 ## Methodology
 
@@ -12,18 +12,32 @@ The review examined:
 - **Implementation:** `src/service-worker.js` and `src/injected-tools.js`
 - **Permissions:** `manifest.json` capabilities and boundaries
 - **Data flow:** Interactions with Chrome DevTools for Agents and page content
-- **Documentation:** `README.md`, `SECURITY.md`, `PRIVACY.md`, `CHROMEWEBSTORE.md`, and `docs/*.md`
+- **Documentation:** `README.md`, `SECURITY.md`, `PRIVACY.md`, `CHROMEWEBSTORE.md`, `AGENTS.md`, and `docs/*.md`
 - **Tests:** `test/injected-tools.test.js` and `test/manifest.test.js`
 
 ## Findings
 
+### AGENTS.md Consistency
+The implementation and this report are consistent with the boundaries defined in `AGENTS.md`:
+- **Consent and Authority:** The extension requires a direct user gesture (`activeTab`) and respects the explicitly limited agent authority (no automated committing/publishing).
+- **Privacy:** As required, no browsing data, content, or credentials are transmitted.
+- **`MAIN`-world Trust Boundaries:** The report acknowledges that the injected tools run in the `MAIN` world (see Optional Suggestion #1) and that hostile pages may spoof results, aligning exactly with the `AGENTS.md` trust boundary.
+
 ### Confirmed Issues
 
-*None.*
+#### 1. Transparency/Wording Issue: Page Text Access Claim
+- **Location:** `src/injected-tools.js` (line 17, `inspectPageSemantics` tool result note)
+- **Detail:** The tool result note claims that "No page text... were read." However, `src/injected-tools.js` reads candidate buttons' `textContent` locally to calculate the `unnamedButtons` count. While page text is not returned, stored, or transmitted, it is transiently inspected for this aggregate count.
+- **Recommendation:** Treat the existing tool-result sentence claiming no page text is read as a transparency/wording issue. Update the documentation and tool result notice to state precisely that page text is not returned or transmitted, rather than claiming it is not read locally.
 
-The implementation strictly adheres to the stated boundaries. There are no missing threat boundaries, misleading claims, or Chrome policy risks identified. Specifically:
+#### 2. Stale Toolbar UI State on Navigation
+- **Location:** `src/service-worker.js`
+- **Detail:** While page navigation correctly removes the injected page state and terminates `activeTab` access, the service worker does not explicitly clear the tab-specific extension badge (the `ON` text) or title on navigation. This may result in a stale toolbar UI state. It is important to distinguish this cosmetic UI state from continued page access, which is properly revoked.
+- **Recommendation:** Consider listening to tab updates or navigation events to reset the badge and title when a tab navigates.
+
+The implementation strictly adheres to its primary security boundaries:
 - **Permissions:** Relies exclusively on `activeTab` and `scripting`. No host permissions are defined.
-- **Data Privacy:** Code performs read-only counts via `document.querySelectorAll` and does not access text, forms, cookies, local storage, or network boundaries.
+- **Data Privacy:** Code performs read-only counts via `document.querySelectorAll`. As noted above, text is transiently inspected but not returned, stored, or transmitted, avoiding credential or sensitive data extraction.
 - **Remote Code & Network Access:** The codebase is entirely static and contains no dynamic evaluation (`eval`), `fetch`, `XMLHttpRequest`, or external dependencies.
 
 ### Optional Suggestions (Informational)
