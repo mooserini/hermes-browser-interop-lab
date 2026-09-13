@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Hermes Browser Interop Lab",
+  "version": "0.1.0",
+  "description": "Consent-gated test tools for narrow, read-only browser interoperability experiments.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "src/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Toggle Hermes Browser Interop Lab on this page"
+  }
+}

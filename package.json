@@ -1,0 +1,15 @@
+{
+  "name": "hermes-browser-interop-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A consent-gated Chrome MV3 test extension for Hermes browser interoperability experiments.",
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/service-worker.js && node --check src/injected-tools.js && node --test",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "Apache-2.0"
+}

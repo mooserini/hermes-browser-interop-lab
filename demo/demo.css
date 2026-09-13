@@ -1,0 +1,30 @@
+:root {
+  color-scheme: light dark;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.55;
+}
+
+body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+header,
+section,
+footer {
+  margin-block-end: 32px;
+}
+
+.eyebrow {
+  color: #7568ff;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+button,
+a {
+  margin-inline-end: 12px;
+}

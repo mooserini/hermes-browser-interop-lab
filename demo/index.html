@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes Browser Interop Lab — Test Page</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Local test fixture</p>
+    <h1>Hermes Browser Interop Lab</h1>
+    <p>Use this page to verify the extension without touching an account, production service, or third-party application.</p>
+  </header>
+  <main>
+    <section aria-labelledby="safe-test-heading">
+      <h2 id="safe-test-heading">Safe test target</h2>
+      <p>The extension should report aggregate semantic counts—not page text, form values, URLs, cookies, or credentials.</p>
+      <button type="button">Named test button</button>
+      <a href="#privacy-boundary">Read the privacy boundary</a>
+    </section>
+    <section id="privacy-boundary" aria-labelledby="privacy-heading">
+      <h2 id="privacy-heading">Privacy boundary</h2>
+      <p>No data leaves the browser. The extension contains no network requests or analytics.</p>
+    </section>
+  </main>
+  <footer>
+    <p>Deliberately boring. A security virtue, occasionally.</p>
+  </footer>
+</body>
+</html>
