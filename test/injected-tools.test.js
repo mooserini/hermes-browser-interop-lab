@@ -29,6 +29,7 @@ class FakeElement {
 
 function createHarness() {
   const listeners = new Map();
+  const selectorCalls = new Map();
   const selectorCounts = new Map([
     ['h1, h2, h3, h4, h5, h6', 3],
     ['header, nav, main, aside, footer, [role="banner"], [role="navigation"], [role="main"], [role="complementary"], [role="contentinfo"]', 4],
@@ -53,6 +54,7 @@ function createHarness() {
     documentElement,
     createElement: (tagName) => new FakeElement(tagName),
     querySelectorAll: (selector) => {
+      selectorCalls.set(selector, (selectorCalls.get(selector) ?? 0) + 1);
       if (selector === 'button, [role="button"]') {
         return buttons;
       }
@@ -74,7 +76,7 @@ function createHarness() {
     },
   };
 
-  return { document, listeners, window };
+  return { document, listeners, selectorCalls, window };
 }
 
 test('registers two narrow tools and toggles cleanly', async () => {
@@ -136,6 +138,27 @@ test('registers two narrow tools and toggles cleanly', async () => {
   assert.deepEqual({ ...disabled }, { enabled: false, toolCount: 0 });
   assert.equal(harness.listeners.has('devtoolstooldiscovery'), false);
   assert.equal(notice.removed, true);
+});
+
+test('queries button elements once per semantics audit', async () => {
+  const harness = createHarness();
+  const context = vm.createContext({
+    document: harness.document,
+    window: harness.window,
+  });
+
+  vm.runInContext(source, context);
+
+  let group;
+  harness.window.dispatch('devtoolstooldiscovery', {
+    respondWith(value) {
+      group = value;
+    },
+  });
+
+  await group.tools[1].execute({});
+
+  assert.equal(harness.selectorCalls.get('button, [role="button"]'), 1);
 });
 
 test('contains no network, storage, cookie, or dynamic-code primitives', () => {

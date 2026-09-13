@@ -33,7 +33,7 @@
       forms: count('form'),
       imagesMissingAlt: count('img:not([alt])'),
       unnamedButtons,
-      note: 'Counts only. No page text, form values, URLs, cookies, storage, or network data were read.',
+      note: 'Counts only. Button text was inspected locally only to calculate unnamedButtons; no page text or form values were returned, stored, or transmitted.',
     };
   };
 
