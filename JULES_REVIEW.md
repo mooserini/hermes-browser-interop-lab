@@ -73,6 +73,6 @@ While the extension's risk profile is extremely low by design, the following obs
 - [x] **No credential access:** Verified. Script only queries non-sensitive tags/roles.
 - [x] **No broad host access:** Verified. `activeTab` only.
 - [x] **No remote code execution:** Verified. Static payload only.
-- [x] **No persistence:** Verified. Injected page state and access end on navigation or second click. The toolbar UI may remain stale after navigation.
-- [x] **No misleading claims:** Wording discrepancy identified regarding page text access.
+- [x] **Page-scope lifecycle:** Injected page state and access end on navigation or second click. The toolbar UI may remain stale after navigation.
+- [ ] **No misleading claims:** Not fully met; the page-text-access wording discrepancy is identified above.
 - [x] **Chrome policy risks:** None. Follows documented MV3 and `activeTab` principles correctly.
