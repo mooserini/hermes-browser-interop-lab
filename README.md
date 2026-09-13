@@ -90,7 +90,17 @@ revocable authority:
 
 Read the [consent-gated browser-control model](docs/agent-browser-control-model-draft.md)
 for the proposed architecture, routing policy, open decisions, and acceptance
-criteria. This is a design proposal, not functionality shipped by this repository.
+criteria. The complete [browser-custody integration plan](docs/plans/2026-09-13-browser-custody-integration.md)
+is preserved with its [plan provenance and status](docs/plans/README.md). The
+[local/origin reconciliation receipt](docs/research/local-origin-reconciliation-2026-09-13.md)
+records which local, branch, and merged artifacts were compared before the first
+implementation spike. These are design and provenance records, not functionality
+shipped by this repository.
+
+The first bounded implementation evidence is the
+[authority-reducer spike](spikes/001-authority-reducer/README.md), accompanied by
+its [independent review trail](spikes/001-authority-reducer/REVIEW.md). It changes
+no current extension permission or runtime behavior.
 
 The research also studies proprietary products only as observable product or
 anti-pattern evidence. Their closed code is not a dependency or source. See the
