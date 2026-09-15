@@ -75,6 +75,14 @@ Please read [SECURITY.md](SECURITY.md), [PRIVACY.md](PRIVACY.md), [docs/architec
 
 This is an independent interoperability experiment. It is not currently part of Hermes Agent, Google Chrome, Chromium, or Nous Research, and it is not endorsed by those projects. A successful experiment may later be proposed upstream through their ordinary review processes.
 
+## Related public sidecar
+
+[resonant-sidecar](https://github.com/mooserini/resonant-sidecar) is the
+**conversational** seat from this lab's four-level trust model: a Chrome Dev
+side panel with **no page access**. This repository remains the page-scoped,
+consent-gated harness (`activeTab` + `scripting` only after a click). They are
+not one extension and do not share permissions.
+
 ## Research direction — no implementation claim
 
 The current extension remains the narrow, read-only harness described above. A
