@@ -28,6 +28,10 @@ A public security contact and coordinated-disclosure process must be added befor
 
 ## Proposed browser-custody research
 
+The [accepted dual-channel decision](docs/decisions/dual-channel-agentic-workbench.md)
+governs the current development sequence: supported Chrome DevTools MCP lanes
+come first, while custom custody requires a demonstrated capability gap.
+
 The repository contains a design proposal for future approval-gated and
 delegated browser control. That document does not widen the current extension's
 permissions or capabilities. Any implementation that adds `debugger`, a local

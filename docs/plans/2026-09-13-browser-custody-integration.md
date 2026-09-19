@@ -63,12 +63,12 @@ License: MIT.
 - Add a strict command allowlist at both broker and extension.
 - Bind broker lifetime and grants to Hermes process/session heartbeats.
 - Replace integer-tab persistence with a navigation-aware tab-instance identity.
-- Keep the dedicated `ara-chrome-dev` profile as the canonical collaborative profile.
+- Keep the dedicated agent-owned Chrome Dev profile as the canonical collaborative profile.
 
 **Reject**
 
 - Installing into every Hermes profile automatically.
-- Treating Tom’s ordinary signed-in Chrome profile as the product boundary.
+- Treating the operator’s ordinary signed-in Chrome profile as the product boundary.
 - Automatic grant inheritance for newly opened tabs.
 - A page-DOM overlay as the authoritative custody indicator.
 - A long-lived detached broker with no owning-session reaper.
@@ -153,11 +153,11 @@ Create `THIRD_PARTY_NOTICES.md` before any adapted source lands. Every adapted b
 6. The extension action badge and side panel—not page-controlled DOM—are the authoritative custody display.
 7. The broker and extension both reject unknown messages and capabilities.
 8. No credentials, cookies, page text, form values, URLs, or browsing history are logged.
-9. The dedicated `ara-chrome-dev` profile is the only collaborative persistent-profile lane in the lab.
+9. The dedicated agent-owned Chrome Dev profile is the only collaborative persistent-profile lane in the lab.
 10. If no valid lease exists, route deterministically to disposable Playwright or fail with an explicit “authorization required”; never seize another browser surface.
 11. No authority, feature exposure, or data access may be coupled to credits, referrals, rewards, streaks, affiliate incentives, upgrade pressure, or engagement metrics.
 12. If an operation has external model/API cost, disclose its provider, scope, and cost basis before execution; never use expiring credits or deliberately opaque metering.
-13. Session-derived page content is deleted with the session unless Tom explicitly saves a named artifact.
+13. Session-derived page content is deleted with the session unless the operator explicitly saves a named artifact.
 
 ---
 
@@ -316,7 +316,7 @@ This deliberately trades convenience for clean custody. Durable keychain-backed 
 1. Copy the source decision ledger and non-negotiable contract from this plan into the ADR.
 2. Document trust boundaries: page ↔ extension; extension ↔ loopback broker; broker ↔ Hermes profile/session; persistent Ara profile ↔ disposable browser.
 3. Enumerate threats: stale grants, tab-ID reuse, navigation, service-worker eviction, broker impersonation, agent-profile impersonation, replay, command confusion, malicious page overlays, secret leakage, debugger contention, orphaned processes, ambient all-origin access, engagement incentives, and cost-obscuring metering.
-4. Add the explicit rule that `debugger` or network permissions require this threat review and Tom’s scoped approval before implementation.
+4. Add the explicit rule that `debugger` or network permissions require this threat review and the operator’s scoped approval before implementation.
 5. Add exact upstream licenses/commits plus AITOPIA and Sider “behavioral reference only” entries. Link `docs/research/sider-closed-source-product-audit.md`; do not add the Sider CRX to the repository.
 6. Encode anti-monetization requirements: no credits, artificial expiry, rewards, streaks, referrals, affiliate prompts, engagement nudges, or authority-coupled upsells; disclose any real external cost before execution.
 7. Run `npm run check`; expected: existing six tests pass unchanged.
@@ -562,7 +562,7 @@ This deliberately trades convenience for clean custody. Durable keychain-backed 
 **Routing order:**
 
 1. Use the exact authorized existing tab if a valid custody lease exists.
-2. Otherwise offer/start the dedicated collaborative `ara-chrome-dev` lane when the task needs persistent identity and Tom authorizes it.
+2. Otherwise offer/start the dedicated agent-owned Chrome Dev lane when the task needs persistent identity and the operator authorizes it.
 3. Otherwise use disposable Playwright.
 4. If the requested action requires a different route than the one shown, stop and explain; never hop silently.
 
@@ -612,13 +612,13 @@ uv run --project packages/hermes-bridge pytest
 
 Expected: all existing root tests and all new JS/Python tests pass.
 
-**Live Chrome Dev matrix:** Follow `AGENTS.md` preflight exactly; record Chrome Dev version, `ara-chrome-dev` profile, extension source digest, extension ID, commit, each authority transition, debugger attach/detach, navigation revocation, broker reaping, and disposable fallback. Mark anything not directly observed `not run` or `unverified`.
+**Live Chrome Dev matrix:** Follow `AGENTS.md` preflight exactly; record Chrome Dev version, dedicated agent-owned profile, extension source digest, extension ID, commit, each authority transition, debugger attach/detach, navigation revocation, broker reaping, and disposable fallback. Mark anything not directly observed `not run` or `unverified`.
 
 Commit: `test: verify browser custody and orphan cleanup`.
 
 ### Task 15: Review before any packaging or upstream proposal
 
-**Objective:** Keep the prototype clean, attributable, and separate from Tom’s live runtime.
+**Objective:** Keep the prototype clean, attributable, and separate from the operator’s live runtime.
 
 **Steps:**
 
@@ -628,7 +628,7 @@ Commit: `test: verify browser custody and orphan cleanup`.
 4. Confirm no minification, obfuscation, remote code, telemetry, analytics, or secrets in artifacts.
 5. Confirm the root read-only harness still has its original permissions and behavior.
 6. Only after all gates pass, create a separate isolated Hermes Agent worktree and upstream PR proposal. Never patch `~/.hermes/hermes-agent` directly.
-7. Packaging, Store submission, publication, maintainer contact, and live installation each require separate explicit authorization from Tom.
+7. Packaging, Store submission, publication, maintainer contact, and live installation each require separate explicit authorization from the operator.
 
 ---
 
@@ -641,7 +641,7 @@ The prototype is complete only when all of these are demonstrated:
 - [ ] Approval-gated mode prompts once per sensitive/mutating command.
 - [ ] Delegated mode is tab-instance-, capability-, profile-, session-, and time-bounded.
 - [ ] New tabs and popups never inherit authority.
-- [ ] Every downgrade/expiry/failure detaches debugger control without closing Tom’s tab.
+- [ ] Every downgrade/expiry/failure detaches debugger control without closing the operator’s tab.
 - [ ] Chrome/extension/broker/Hermes restarts cannot resurrect grants.
 - [ ] Broker is loopback-only, mutually authenticated, exact-versioned, replay-resistant, principal-scoped, and reaped.
 - [ ] No generic CDP tunnel or arbitrary JavaScript execution is exposed.
@@ -664,7 +664,7 @@ The prototype is complete only when all of these are demonstrated:
 - **A hostile page can spoof in-page indicators.** Page overlays are informational only; extension chrome is authoritative.
 - **Store acceptance proves distribution-policy compliance, not source quality or safety.** Treat it as one release gate, never the trust root.
 
-## 8. Open decisions requiring Tom’s approval before implementation
+## 8. Open decisions requiring operator approval before implementation
 
 1. Approve creating the separate `packages/custody-extension` manifest with the `debugger` permission.
 2. Approve adding a loopback WebSocket companion package to this currently network-silent repository.

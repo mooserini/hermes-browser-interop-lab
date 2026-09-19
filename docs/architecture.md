@@ -1,6 +1,9 @@
 # Architecture and trust boundary
 
 > **Current contract:** This document describes the shipped one-tab harness.
+> The [accepted dual-channel decision](decisions/dual-channel-agentic-workbench.md)
+> governs the current development sequence and tests supported Chrome DevTools
+> MCP lanes before custom custody.
 > The broader [browser custody model](agent-browser-control-model-draft.md) is a
 > draft trajectory only and adds no present capability or permission.
 

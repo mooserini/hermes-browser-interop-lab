@@ -72,4 +72,4 @@ npm run check
 0 tests failed
 ```
 
-The static scan found no hardcoded secret assignments or dangerous execution/deserialization primitives. No commit or publication was performed until Thomas Kenny explicitly requested durable preservation.
+The static scan found no hardcoded secret assignments or dangerous execution/deserialization primitives. No commit or publication was performed until the human maintainer explicitly requested durable preservation.

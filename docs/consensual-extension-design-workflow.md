@@ -1,6 +1,6 @@
 # Privacy-Scoped, User-Visible Consensual Extension Design Workflow
 
-A companion guide and architectural reference for engineering user-visible, consensual browser extension interfaces (e.g., `mooserini/hermes-browser-interop-lab`).
+A companion guide and architectural reference for engineering user-visible, consensual browser extension interfaces (e.g., `hermes-browser-interop-lab`).
 
 ## 1\. Core Principles
 
