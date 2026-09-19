@@ -2,7 +2,12 @@
 
 **Status:** Rough architecture draft for discussion; not an implemented capability or current security claim
 
-**Authors:** Ara Voss; product direction, constraints, and testing partnership by Thomas Kenny (`mooserini`)
+**Authors:** Ara Voss; product direction, constraints, and testing partnership by the human maintainer
+
+> **Current implementation authority:** The
+> [accepted dual-channel agentic browser workbench decision](decisions/dual-channel-agentic-workbench.md)
+> governs present sequencing. This draft retains future product and custody ideas;
+> those ideas are not prerequisites for proving the supported Chrome DevTools MCP path.
 
 ## Purpose
 
@@ -24,9 +29,9 @@ The extension is the human-visible consent boundary, shared workspace, and brows
 2. **Conversation is not control.** Opening the agent beside a page permits interaction with the agent UI, not automatic inspection or manipulation of the page.
 3. **Exact-scope delegation.** Authorization applies to the tab the person deliberately shares, not automatically to adjacent tabs, windows, profiles, or future navigations.
 4. **Visible custody.** The interface distinguishes conversational presence, approval-gated action, and delegated control, and makes revocation obvious.
-5. **Least-privileged routing.** Use disposable automation unless persistent identity, explicit human delegation, or live collaboration provides a concrete reason not to.
+5. **Explicit capability routing.** Use the operator-selected named browser lane that fits the task; use disposable automation only when its separate identity is actually desired.
 6. **No silent substitution.** Failure in one strategy must not silently reroute an action into a browser with different identity or authority.
-7. **One agent-facing command vocabulary.** Browser transports may differ underneath, but the agent should receive consistent operations and result shapes.
+7. **Unify only after evidence.** Browser transports may eventually share operations and result shapes, but the first vertical slice must not build a universal abstraction before observing the real supported protocol.
 8. **Identity is explicit.** A dedicated agent profile, a human-delegated profile, and a disposable profile are different principals and must never be presented as interchangeable.
 9. **Lifecycle is part of security.** Launch, attachment, detachment, crash recovery, ownership, and cleanup must be as well-defined as navigation and clicking.
 
@@ -122,7 +127,7 @@ These strategies are selected underneath the human-facing trust model. They must
 
 **Use when:**
 
-- no tab is presently Approval-gated or under Delegated control;
+- the operator deliberately chooses a separate disposable identity;
 - the task requires no persistent browser identity;
 - public or untrusted browsing is sufficient;
 - isolated, unattended automation is preferable.
@@ -135,11 +140,13 @@ These strategies are selected underneath the human-facing trust model. They must
 - deterministic cleanup;
 - headless or visible presentation chosen for task needs, not identity theater.
 
-This is the default fallback, not a degraded emergency mode. It may remain invisible when headless operation is appropriate, while its results return through the same agent conversation surface.
+This is a distinct strategy, not an automatic fallback. It may remain invisible
+when headless operation is appropriate, while its results return through the
+same agent conversation surface. Failure in Stable or Dev does not select it.
 
 ### Strategy B — Human-delegated personal tab
 
-**Environment:** A tab in a person's existing Chromium profile, placed under Approval-gated or Delegated control through the extension.
+**Environment:** A tab in a person's existing Chrome Stable profile, connected through Chrome's visible secure auto-connect consent for development work or through a future extension-owned custody flow when product requirements demonstrate that need.
 
 **Use when:**
 
@@ -149,15 +156,15 @@ This is the default fallback, not a degraded emergency mode. It may remain invis
 
 **Properties:**
 
-- authority comes from the direct user gesture;
-- access is tab-scoped and capability-scoped;
+- authority comes from the operator's explicit lane choice and Chrome's visible connection consent; future extension-owned custody may add a narrower direct-gesture grant;
+- development tests remain targeted to the selected fixture or tab and must not inventory unrelated profile state;
 - surrounding profile state is not implicitly authorized;
 - the agent acts as a disclosed delegate, not as the profile owner;
 - failure must not silently fall back to a different identity or browser.
 
 ### Strategy C — Dedicated collaborative agent browser
 
-**Environment:** Visible Google Chrome Dev using a dedicated collaborative profile and the same consent/controller protocol.
+**Environment:** Visible Google Chrome Dev using the supported Chrome DevTools MCP connection, with a dedicated collaborative profile when classic raw CDP or persistent experimental isolation requires one.
 
 **Use when:**
 
@@ -168,8 +175,8 @@ This is the default fallback, not a degraded emergency mode. It may remain invis
 
 **Properties:**
 
-- dedicated browser-profile identity;
-- visible agent custody;
+- explicit Dev-channel identity;
+- visible Chrome connection state and agent activity;
 - human observation and intervention;
 - explicit launch ownership and lifecycle records;
 - no attachment to unrelated personal browser processes;
@@ -178,16 +185,18 @@ This is the default fallback, not a degraded emergency mode. It may remain invis
 ## Deterministic routing policy
 
 ```text
-INPUT: requested browser action, task context, live controller registry
+INPUT: requested browser action, task context, operator-selected lane
 
-1. Is an exact tab currently Approval-gated or under Delegated control for this controller/session?
-   YES → Route only to that authorized tab under the selected trust rule.
+1. Did the operator select Chrome Stable for mainstream or authenticated live-browser behavior?
+   YES → Use only the named Stable lane and the explicitly targeted fixture or tab.
 
-2. Does the task require persistent Ara identity or explicit live collaboration?
-   YES → Offer or launch the dedicated collaborative Chrome Dev strategy inside the same product experience.
-          Begin at Conversational and require a current authority choice before control.
+2. Did the operator select Chrome Dev for experimental WebMCP or future-channel behavior?
+   YES → Use only the named Dev lane.
 
-3. Otherwise → Use disposable Playwright Chromium.
+3. Is a separate unauthenticated or disposable identity actually desired?
+   YES → Use disposable Playwright Chromium and identify it as a different browser principal.
+
+4. Otherwise → Ask for a lane choice; do not silently substitute identities.
 ```
 
 Additional rules:
@@ -198,9 +207,10 @@ Additional rules:
 - If the selected strategy fails, report the failure and required choice. Do not impersonate continuity by falling back to another profile.
 - Sensitive actions may require a fresh confirmation even during Delegated control.
 
-## Common command vocabulary and transport adapters
+## Possible later command vocabulary and transport adapters
 
-The agent-facing contract should expose consistent conceptual operations:
+A later adapter layer may expose consistent conceptual operations after the
+supported protocol has been observed. This catalog is not first-slice scope:
 
 ```text
 navigate
@@ -214,14 +224,15 @@ read_console
 list_tabs
 ```
 
-The implementation may route them through different adapters:
+A later implementation may route them through different adapters:
 
 ```text
 Agent browser command
         │
-        ├── Playwright adapter ── disposable Chromium
-        ├── CDP adapter ───────── dedicated Chrome Dev
-        └── Extension adapter ─── explicitly authorized existing tab
+        ├── Chrome DevTools MCP ─ named Stable or Dev lane
+        ├── Playwright adapter ── explicitly requested disposable Chromium
+        ├── raw CDP adapter ───── demonstrated low-level gap
+        └── extension adapter ─── future extension-owned tab custody
 ```
 
 The adapters should normalize command inputs, structured results, errors, cancellation, and capability reporting. They should not pretend that the underlying authority is identical.
@@ -271,12 +282,12 @@ This design emerged independently, but the core mechanism is established prior a
 | **Sider** | Demonstrates polished page-adjacent AI workflows alongside a closed, unusually broad permission surface, consumption-based monetization, aggressive retention language, and inconsistent first-party content-rights statements.[15] | Use as a documented anti-pattern study. Keep only narrow UX observations; inherit no code, binary, trust, telemetry, credit system, engagement mechanism, or ambient authority. |
 
 The strongest practical conclusion is that a new browser-driving engine is not
-the default next step. The first technical spike should test a narrow,
-grant-checked `chrome.debugger` transport adapted from inspectable prior art,
-behind an authenticated loopback bridge and an extension-owned authority state
-machine. It must not import a recorder product, attach-all behavior, a generic
-CDP tunnel, or a full Playwright runtime into the service worker merely because
-those pieces already exist.
+the default next step. The first technical slice should use Chrome DevTools MCP
+against explicit Stable and Dev lanes, carry one harmless Hermes tool lifecycle
+through the Sidecar, and record what actually fails. A grant-checked
+`chrome.debugger` transport, authenticated loopback bridge, or extension-owned
+authority state machine becomes appropriate only when that evidence identifies a
+capability requiring extension-owned runtime tab custody.
 
 Proprietary ChatGPT, Gemini, Claude, Copilot, AITOPIA, and Sider packages are
 behavior and safety references only. Their distributed binaries may be
@@ -287,14 +298,16 @@ Open-source Playwright and Real Browser MCP can be inspected and, where their li
 
 Chrome MCP Server and Chrome DevTools MCP provide additional inspectable implementations under their published terms.[9][10]
 
-No implementation begins from this document alone. Permission expansion,
-loopback transport, persistent-profile control, and any return of page content
-remain separate review gates. The present repository continues to ship only its
-existing direct-gesture, read-only, network-silent harness.
+No implementation begins from this draft alone. The accepted dual-channel
+decision permits the narrow official-MCP development slice without first
+building custom custody. Permission expansion, loopback transport, custom
+persistent-profile control, and any return of page content remain separate
+review gates. The present repository continues to ship only its existing
+direct-gesture, read-only, network-silent harness.
 
 ## Extension responsibilities
 
-The production extension should:
+If evidence later justifies a production extension-owned custody system, it should:
 
 1. Present Dormant, Conversational, Approval-gated, and Delegated control distinctly.
 2. Treat opening the side panel as conversational presence, not control authorization.
@@ -312,10 +325,10 @@ The production extension should:
 
 Hermes should:
 
-1. Prefer disposable automation when no current consent or identity requirement exists.
+1. Use the explicitly selected named browser lane and never silently substitute a different browser identity.
 2. Treat Dormant and Conversational as non-authorizing.
 3. Present its identity and requested capabilities before entering Approval-gated or Delegated control.
-4. Maintain one authoritative lease per controlled tab unless a future multi-controller policy is explicitly designed.
+4. If a future extension-owned custody system is approved, maintain one authoritative lease per controlled tab unless a later multi-controller policy is explicitly designed.
 5. Cancel outstanding operations when control is stopped.
 6. Never broaden tab authorization into profile authorization.
 7. Record enough local metadata to explain which controller, profile, tab, session, and capability set were used without collecting page content unnecessarily.
@@ -352,6 +365,11 @@ A complete implementation must define and test:
 ## Relationship to the current interoperability lab
 
 The current laboratory proves a narrower boundary: direct-gesture `activeTab` activation, fixed script injection, minimal read-only page tools, no host permissions, no network transport, and no persistent controller state.
+
+The accepted implementation path first exercises that fixture and the Resonant
+Sidecar through named Stable and Dev Chrome DevTools MCP lanes. It does not wait
+for this draft's complete custody system before testing a harmless observable
+tool lifecycle.
 
 This document does **not** claim that the existing extension already implements general browser control. Moving from the lab to a controller requires an explicit scope decision because it changes permissions, transport, data flow, UI, threat model, privacy documentation, and browser-store disclosures.
 
